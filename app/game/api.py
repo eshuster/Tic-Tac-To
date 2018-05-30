@@ -16,7 +16,7 @@ def new_game():
 		db.session.add(game)
 		db.session.commit()
 		
-		return jsonify({"game_id" : game.id, "name" : game.name})
+		return jsonify({"game_id" : game.id, "name" : game.name, "board" : game.board.cell})
 		
 	except Exception as e:
 		response = jsonify({"error" : str(e)})
