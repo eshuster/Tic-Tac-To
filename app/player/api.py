@@ -12,6 +12,7 @@ def create_player():
 		player = Player()
 		player.username = data['username']
 		player.symbol = data['symbol']
+		player.add_to_game(data['game_id'])
 
 		db.session.add(player)
 		db.session.commit()

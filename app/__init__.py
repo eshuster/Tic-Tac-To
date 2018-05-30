@@ -10,10 +10,6 @@ db = SQLAlchemy()
 
 def create_app(config_name):
     app = Flask(__name__, instance_relative_config=True)
-    # app = Flask(__name__, instance_relative_config=True)
-    # print("****"* 10) 
-    # print(app_config)
-    # print("****"* 10)
     app.config.from_object(app_config['development'])
     app.config.from_pyfile('config.py')
     db.init_app(app)
@@ -29,11 +25,6 @@ def create_app(config_name):
 
     from .game import game as game_blueprint
     app.register_blueprint(game_blueprint, url_prefix='/game')
-
-    # temporary route
-    # @app.route('/')
-    # def hello_world():
-    #     return 'Hello, World!'
 
     return app
 

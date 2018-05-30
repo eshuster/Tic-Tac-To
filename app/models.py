@@ -9,7 +9,8 @@ class Game(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(60), index=True, unique=True)
 	board = db.relationship('Board', back_populates='game', uselist=False)
-	active = db.Column(db.Boolean, default=True)
+	active = db.Column(db.Boolean, default=False)
+	player = db.relationship('Player', back_populates='game')
 
 	def create_board(self):
 		board = Board()
@@ -36,6 +37,7 @@ class Board(db.Model):
 			cell.board = self 
 			cell.position = pos
 			db.session.add(cell)
+			db.session.commit()
 
 	# Checks the game_board sent from check_for_winner
 	# Returns the symbol if the set contains the same elements
@@ -110,6 +112,18 @@ class Player(db.Model):
 	cell = db.relationship('Cell', back_populates='player')
 	symbol = db.Column(db.String(60), index=True, unique=True)
 	username = db.Column(db.String(60), index=True, unique=True)
+
+	game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
+	game = db.relationship('Game', back_populates='player', foreign_keys=[game_id])
+
+	def add_to_game(self, game_id):
+		game = Game.query.get_or_404(game_id)
+		self.game = game
+		db.session.commit()
+
+		if len(game.player) == 2:
+			game.active = True
+			db.session.commit()
 
 	def __repr__(self):
 		return '<Player: {}>'.format(self.username)
