@@ -37,10 +37,10 @@ def create_player():
 
 from app import create_app
 
-app = create_app('x')
-app.app_context().push()
+# app = create_app('x')
+# app.app_context().push()
 
-from app import db
+# from app import db
 
-db.create_all()
-db.session.commit()
+# db.create_all()
+# db.session.commit()
