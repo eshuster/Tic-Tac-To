@@ -35,8 +35,7 @@ def select_position():
 		if game.active == True:
 			if str(board.last_player) != str(player.id):			
 				cell = Cell.query.get_or_404(data['cell_id'])
-
-				# if cell.player_id is None:
+		
 				if cell.player is None:
 					cell.player = player
 					cell.player_id = player.id
@@ -44,15 +43,16 @@ def select_position():
 
 					board.last_player = player.id
 					check_result = board.check_for_winner(player);
+					db.session.commit()
 
 					if check_result == True:
 						game.active = False
+						db.session.commit()
 
 						return jsonify({"winner" : True, "board" : repr(game.board.cell)})
 					else:
 						return jsonify({"winner" : False, "board" : repr(game.board.cell)})
 
-					db.session.commit()
 				else:
 					return jsonify({"error" : "Position Already Selected"})
 
