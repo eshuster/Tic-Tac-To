@@ -101,7 +101,7 @@ class Cell(db.Model):
 	position = db.Column(db.Integer)
 
 	def __repr__(self):
-		return "{cell_id: %s,  cell_position: %s, board_id: %s, player_id: %s, player_symbol: %s}" % (self.id, self.position, self.board_id, self.player_id, self.symbol)
+		return "{cell_id: %s,  cell_position: %s, board_id: %s, player_id: %s, player_symbol: %s}" % (self.id, self.position, self.board_id, self.player_id, self.player.symbol)
  
 
 class Player(db.Model):
