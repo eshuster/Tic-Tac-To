@@ -33,3 +33,14 @@ def create_player():
 		response.status_code = 500
 
 		return response
+
+
+from app import create_app
+
+app = create_app('x')
+app.app_context().push()
+
+from app import db
+
+db.create_all()
+db.session.commit()
