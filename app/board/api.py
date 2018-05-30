@@ -46,9 +46,9 @@ def select_position():
 					if check_result == True:
 						game.active = False
 
-						return jsonify({"winner" : True, "board" : board.cell})
+						return jsonify({"winner" : True, "board" : repr(game.board.cell)})
 					else:
-						return jsonify({"winner" : False, "board" : board.cell})
+						return jsonify({"winner" : False, "board" : repr(game.board.cell)})
 
 					db.session.commit()
 				else:
