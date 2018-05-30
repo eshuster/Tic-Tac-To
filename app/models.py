@@ -118,8 +118,12 @@ class Player(db.Model):
 
 	def add_to_game(self, game_id):
 		game = Game.query.get_or_404(game_id)
-		self.game = game
-		db.session.commit()
+
+		if len(game.player) < 2:
+			self.game = game
+			db.session.commit()
+		else:
+			return "Game is Full"
 
 		if len(game.player) == 2:
 			game.active = True

@@ -12,15 +12,19 @@ def create_player():
 		player = Player()
 		player.username = data['username']
 		player.symbol = data['symbol']
-		player.add_to_game(data['game_id'])
 
-		db.session.add(player)
-		db.session.commit()
+		result = player.add_to_game(data['game_id'])
 
-		response = jsonify({"player_id" : player.id, "username" : player.username, "symbol" : player.symbol})
-		response.status_code = 201
+		if result == "Game is Full":
+			return jsonify({"error" : "Cannot Add Player To An Already Full Game"})
+		else:
+			db.session.add(player)
+			db.session.commit()
 
-		return response
+			response = jsonify({"player_id" : player.id, "username" : player.username, "symbol" : player.symbol})
+			response.status_code = 201
+
+			return response
 		
 	except Exception as e:
 		response = jsonify({"error" : str(e)})
