@@ -101,7 +101,7 @@ class Cell(db.Model):
 	position = db.Column(db.Integer)
 
 	def __repr__(self):
-		return '<Cell Position: {}>'.format(self.position)
+		return "{cell_id: %s,  cell_position: %s, board_id: %s}" % (self.id, self.position, self.board_id)
  
 
 class Player(db.Model):
