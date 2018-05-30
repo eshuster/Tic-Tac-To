@@ -14,7 +14,9 @@ def create_player():
 		player.symbol = data['symbol']
 
 		result = player.add_to_game(data['game_id'])
-
+		print("----" * 8)
+		print(result)
+		print("----" * 8)
 		if result == "Game is Full":
 			return jsonify({"error" : "Cannot Add Player To An Already Full Game"})
 		else:

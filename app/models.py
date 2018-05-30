@@ -118,6 +118,9 @@ class Player(db.Model):
 
 	def add_to_game(self, game_id):
 		game = Game.query.get_or_404(game_id)
+		print("----" * 8)
+		print(game.player)
+		print("----" * 8)
 
 		if len(game.player) < 2:
 			self.game = game
