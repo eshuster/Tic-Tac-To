@@ -1,24 +1,6 @@
-# # app/__init__.py
-
-# from flask import Flask
-
-# # Initialize the app
-# app = Flask(__name__, instance_relative_config=True)
-
-# # Load the views
-# from app import views
-
-# # Load the config file
-# app.config.from_object('config')
-
-
-# app/__init__.py
-
-# third-party imports
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
 
 # local imports
 from config import app_config
@@ -55,3 +37,6 @@ def create_app(config_name):
 
     return app
 
+
+app = create_app()
+app.app_context().push()
