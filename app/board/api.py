@@ -36,8 +36,10 @@ def select_position():
 			if str(board.last_player) != str(player.id):			
 				cell = Cell.query.get_or_404(data['cell_id'])
 
+				# if cell.player_id is None:
 				if cell.player is None:
 					cell.player = player
+					cell.player_id = player.id
 					cell.board = board
 
 					board.last_player = player.id
