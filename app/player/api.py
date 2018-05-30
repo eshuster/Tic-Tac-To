@@ -35,7 +35,7 @@ def create_player():
 		return response
 
 
-from app import create_app
+# from app import create_app
 
 # app = create_app('x')
 # app.app_context().push()
