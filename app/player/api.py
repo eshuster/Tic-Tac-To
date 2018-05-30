@@ -16,7 +16,7 @@ def create_player():
 		db.session.add(player)
 		db.session.commit()
 
-		response = jsonify({"data" : player})
+		response = jsonify({"player_id" : player.id, "username" : player.username, "symbol" : player.symbol})
 		response.status_code = 201
 
 		return response
