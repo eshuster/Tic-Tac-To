@@ -42,6 +42,9 @@ class Board(db.Model):
 	# Checks the game_board sent from check_for_winner
 	# Returns the id if the set contains the same elements
 	def check_rows_and_columns(self, board):
+		# print("*** Rows and Columns****")
+		# print(board)
+		# print("*******"*10)
 		for row in board:
 			if len(set(row)) == 1:
 				return row[0]
@@ -49,6 +52,10 @@ class Board(db.Model):
 
 	# Checks the game_board sent from check_for_winner if check_rows_and_columns returns 0 
 	def check_diagonals(self, board, player):
+		# print("*** check_diagonals ****")
+		# print(board)
+		# print("*******"*10)
+
 		if len(set([board[i][i] for i in range(len(board))])) == 1:
 			return board[0][0]
 
@@ -68,20 +75,25 @@ class Board(db.Model):
 		index = 0
 		#  Creates the game_board forming an array comprised of arrays with length 9
 		# [[1,2, 3, 4...], [10, 11, 12, 13...], [19, 20, 21, 21...], ...]
-		while index < len(self.cell):			
+		while index < len(self.cell):		
+			# print(self.cell[index])	
 			if (index + 1) % 9 == 0 and index != 0:
-				if self.cell[index].player:
-					row.append(self.cell[index].player.id)
-					board.append(row)
-					row= []
+				# if self.cell[index].player_id:
+				row.append(self.cell[index].player_id)
+				board.append(row)
+				row= []
 			else:
-				if self.cell[index].player:
-					row.append(self.cell[index].player.id)
+				# if self.cell[index].player_id:
+				row.append(self.cell[index].player_id)
 
 			index = index+1
 
+		print(board)
 	    # transposition to check rows, then columns
 		for new_board in [board, np.transpose(board)]:
+			# print("new_board")
+			# print(new_board)
+			# print("new_board")
 			result = self.check_rows_and_columns(new_board)
 			# If the result of check_rows_and_columns is not a 0 and maches the Player id then that Player has WON
 			if result == player.id:
