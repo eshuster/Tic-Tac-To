@@ -5,9 +5,9 @@ from flask_cors import CORS, cross_origin
 from app.models import Game, Board, Cell, Player
 from app.player import player
 
-# app = Flask(__name__)
-# CORS(app)
-# app.config['CORS_HEADERS'] = 'Content-Type'
+app = Flask(__name__)
+CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @player.route('/create_players', methods=['POST'])
 @cross_origin()

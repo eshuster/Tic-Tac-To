@@ -1,11 +1,18 @@
-from flask import jsonify, request
+from flask import jsonify, request, Flask
 from flask_cors import CORS, cross_origin
 from app import db
 
 from app.models import Game, Board, Cell, Player
 from app.board import board
 
+from flask_cors import CORS, cross_origin
+app = Flask(__name__)
+CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
+
 @board.route('/check_for_winner/<int:board_id>/<int:player_id>', methods=['GET'])
+@cross_origin()
 def check_for_winner(board_id, player_id):
 	try:
 		board = Board.query.get_or_404(board_id)

@@ -1,11 +1,11 @@
 from flask import jsonify, request, Flask, json
 from app import db
 
-from flask_cors import CORS, cross_origin
 
 from app.models import Game, Board, Cell
 from app.game import game
 
+from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
