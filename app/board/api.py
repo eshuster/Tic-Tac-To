@@ -1,4 +1,5 @@
 from flask import jsonify, request
+from flask_cors import CORS, cross_origin
 from app import db
 
 from app.models import Game, Board, Cell, Player
@@ -23,8 +24,8 @@ def check_for_winner(board_id, player_id):
 
 		return response
 
-
 @board.route('/select_position', methods=['POST'])
+@cross_origin()
 def select_position():
 	try:
 		data = request.get_json() or {}

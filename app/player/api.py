@@ -1,29 +1,36 @@
-from flask import jsonify, request
+from flask import jsonify, request, Flask, json
 from app import db
+from flask_cors import CORS, cross_origin
 
 from app.models import Game, Board, Cell, Player
 from app.player import player
 
-@player.route('/create_player', methods=['POST'])
-def create_player():
+# app = Flask(__name__)
+# CORS(app)
+# app.config['CORS_HEADERS'] = 'Content-Type'
+
+@player.route('/create_players', methods=['POST'])
+@cross_origin()
+def create_players():
 	try:
 		data = request.get_json() or {}
 
-		player = Player()
-		player.username = data['username']
-		player.symbol = data['symbol']
+		player_one = Player()
+		player_two = Player()
+		player_one.username = data['playerOneName']
+		player_two.username = data['playerTwoName']
 
-		result = player.add_to_game(data['game_id'])
-		print("----" * 8)
-		print(result)
-		print("----" * 8)
-		if result == "Game is Full":
+		result_one = player_one.add_to_game(data['gameId'])
+		result_two = player_two.add_to_game(data['gameId'])
+
+		if result_one == "Game is Full" or result_two == "Game is Full":
 			return jsonify({"error" : "Cannot Add Player To An Already Full Game"})
-		else:
-			db.session.add(player)
+		if result_one != "Game is Full" and result_two != "Game is Full":
+			db.session.add(player_one)
+			db.session.add(player_two)
 			db.session.commit()
 
-			response = jsonify({"player_id" : player.id, "username" : player.username, "symbol" : player.symbol})
+			response = jsonify({"playerOneId" : player_one.id, "playerOneName" : player_one.username, "playerTwoId" : player_two.id, "playerTwoName" : player_two.username })
 			response.status_code = 201
 
 			return response
@@ -34,13 +41,3 @@ def create_player():
 
 		return response
 
-
-# from app import create_app
-
-# app = create_app('x')
-# app.app_context().push()
-
-# from app import db
-
-# db.create_all()
-# db.session.commit()

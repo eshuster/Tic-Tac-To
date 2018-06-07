@@ -40,7 +40,7 @@ class Board(db.Model):
 			db.session.commit()
 
 	# Checks the game_board sent from check_for_winner
-	# Returns the symbol if the set contains the same elements
+	# Returns the id if the set contains the same elements
 	def check_rows_and_columns(self, board):
 		for row in board:
 			if len(set(row)) == 1:
@@ -52,40 +52,39 @@ class Board(db.Model):
 		if len(set([board[i][i] for i in range(len(board))])) == 1:
 			return board[0][0]
 
-			if player.symbol == board[0][0]:
+			if player.id == board[0][0]:
 				return True
 
 		if len(set([board[i][len(board)-i-1] for i in range(len(board))])) == 1:
-			if player.symbol == board[0][len(board)-1]:
+			if player.id == board[0][len(board)-1]:
 				return True
 
 		return False
 
 	def check_for_winner(self, player):
 		board = []
-		row = []
+		row = [] 
 
 		index = 0
 		#  Creates the game_board forming an array comprised of arrays with length 9
 		# [[1,2, 3, 4...], [10, 11, 12, 13...], [19, 20, 21, 21...], ...]
-		while index < len(self.cell):
-			
+		while index < len(self.cell):			
 			if (index + 1) % 9 == 0 and index != 0:
 				if self.cell[index].player:
-					row.append(self.cell[index].player.symbol)
+					row.append(self.cell[index].player.id)
 					board.append(row)
 					row= []
 			else:
 				if self.cell[index].player:
-					row.append(self.cell[index].player.symbol)
+					row.append(self.cell[index].player.id)
 
 			index = index+1
 
 	    # transposition to check rows, then columns
 		for new_board in [board, np.transpose(board)]:
 			result = self.check_rows_and_columns(new_board)
-			# If the result of check_rows_and_columns is not a 0 and maches the Player symbol then that Player has WON
-			if result == player.symbol:
+			# If the result of check_rows_and_columns is not a 0 and maches the Player id then that Player has WON
+			if result == player.id:
 				return True
 		return self.check_diagonals(board, player)
 
@@ -102,26 +101,26 @@ class Cell(db.Model):
 	player = db.relationship('Player', back_populates='cell', foreign_keys=[board_id, player_id])
 	position = db.Column(db.Integer)
 
-	def __repr__(self):
+	def __repr__(self):		
 		return "{cell_id: %s,  cell_position: %s, board_id: %s, player_id: %s}" % (self.id, self.position, self.board_id, self.player_id)
- 
+ 	
+	def toJSON(self):
+		return {'cell_id': self.id, 'cell_position': self.position, 'board_id' : self.board_id, 'player_id' : self.player_id, 'game_id' : self.board.game_id, 'game_name' : self.board.game.name}
 
 class Player(db.Model):
 	
 	id = db.Column(db.Integer, primary_key=True)
 	cell = db.relationship('Cell', back_populates='player')
-	symbol = db.Column(db.String(60), index=True, unique=True)
-	username = db.Column(db.String(60), index=True, unique=True)
+	username = db.Column(db.String(60), index=True)
 
 	game_id = db.Column(db.Integer, db.ForeignKey('game.id'))
 	game = db.relationship('Game', back_populates='player', foreign_keys=[game_id])
 
+	# symbol = db.Column(db.String(60), index=True)
+
 	def add_to_game(self, game_id):
 		game = Game.query.get_or_404(game_id)
-		print("----" * 8)
-		print(game.player)
-		print("----" * 8)
-
+	
 		if len(game.player) < 2:
 			self.game = game
 			db.session.commit()
